@@ -5,19 +5,17 @@
 Summary:	High-performance implementation of several "scalability protocols"
 Summary(pl.UTF-8):	Wydajna implementacja kilku "protokołów skalowalności"
 Name:		nanomsg
-Version:	0.5
+Version:	1.1.5
 Release:	1
 License:	MIT
 Group:		Libraries
-#Source0Download: http://nanomsg.org/download.html
-Source0:	http://download.nanomsg.org/%{name}-%{version}-beta.tar.gz
-# Source0-md5:	65a79eabfc33e7a55e2293e12c367f73
-URL:		http://nanomsg.org/
-BuildRequires:	asciidoc
-BuildRequires:	autoconf >= 2.53
-BuildRequires:	automake >= 1.6
-BuildRequires:	libtool >= 2:2
-BuildRequires:	xmlto
+#Source0Download: https://github.com/nanomsg/nanomsg/releases
+Source0:	https://github.com/nanomsg/nanomsg/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	272db464bac1339b6cea060dd63b22d4
+Patch0:		%{name}-nolibs.patch
+URL:		https://nanomsg.org/
+BuildRequires:	cmake >= 2.8.12
+BuildRequires:	ruby-asciidoctor
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -57,29 +55,41 @@ Static nanomsg library.
 Statyczna biblioteka nanomsg.
 
 %prep
-%setup -q -n %{name}-%{version}-beta
+%setup -q
+%patch0 -p1
 
 %build
-%{__libtoolize}
-%{__aclocal} -I m4
-%{__autoconf}
-%{__automake}
-%configure \
-	--enable-doc \
-	--disable-silent-rules \
-	%{!?with_static_libs:--disable-static}
+%if %{with static_libs}
+install -d build-static
+cd build-static
+%cmake .. \
+	-DNN_STATIC_LIB=ON \
+	-DCMAKE_INSTALL_LIDBIR=%{_lib}
+
+%{__make}
+cd ..
+%endif
+
+install -d build
+cd build
+%cmake .. \
+	-DCMAKE_INSTALL_LIDBIR=%{_lib}
+
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
+%if %{with static_libs}
+%{__make} -C build-static install \
+	DESTDIR=$RPM_BUILD_ROOT
+%endif
+
+%{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# obsoleted by pkg-config
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/libnanomsg.la
 # HTML version of man pages (generated from the same asciidoc sources)
-%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/nanomsg
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/*.html
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -89,18 +99,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog README
+%doc AUTHORS COPYING README.md SUPPORT
 %attr(755,root,root) %{_bindir}/nanocat
-%attr(755,root,root) %{_bindir}/nn_*
 %attr(755,root,root) %{_libdir}/libnanomsg.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnanomsg.so.0
+%attr(755,root,root) %ghost %{_libdir}/libnanomsg.so.5
 %{_mandir}/man1/nanocat.1*
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libnanomsg.so
 %{_includedir}/nanomsg
-%{_pkgconfigdir}/libnanomsg.pc
+%{_pkgconfigdir}/nanomsg.pc
+%{_libdir}/cmake/nanomsg-%{version}
 %{_mandir}/man3/nn_*.3*
 %{_mandir}/man7/nanomsg.7*
 %{_mandir}/man7/nn_*.7*

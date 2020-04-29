@@ -1,0 +1,15 @@
+--- nanomsg-1.1.5/CMakeLists.txt.orig	2018-10-15 15:50:59.000000000 +0200
++++ nanomsg-1.1.5/CMakeLists.txt	2020-04-29 08:07:48.706914542 +0200
+@@ -238,12 +238,9 @@
+     nn_check_func (kqueue NN_HAVE_KQUEUE)
+     nn_check_func (poll NN_HAVE_POLL)
+ 
+-    nn_check_lib (anl getaddrinfo_a NN_HAVE_GETADDRINFO_A)
+     nn_check_lib (rt clock_gettime  NN_HAVE_CLOCK_GETTIME)
+     nn_check_lib (rt sem_wait NN_HAVE_SEMAPHORE_RT)
+     nn_check_lib (pthread sem_wait  NN_HAVE_SEMAPHORE_PTHREAD)
+-    nn_check_lib (nsl gethostbyname NN_HAVE_LIBNSL)
+-    nn_check_lib (socket socket NN_HAVE_LIBSOCKET)
+ 
+     nn_check_sym (CLOCK_MONOTONIC time.h NN_HAVE_CLOCK_MONOTONIC)
+     nn_check_sym (atomic_cas_32 atomic.h NN_HAVE_ATOMIC_SOLARIS)
