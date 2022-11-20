@@ -5,13 +5,13 @@
 Summary:	High-performance implementation of several "scalability protocols"
 Summary(pl.UTF-8):	Wydajna implementacja kilku "protokołów skalowalności"
 Name:		nanomsg
-Version:	1.1.5
+Version:	1.2
 Release:	1
 License:	MIT
 Group:		Libraries
 #Source0Download: https://github.com/nanomsg/nanomsg/releases
 Source0:	https://github.com/nanomsg/nanomsg/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	272db464bac1339b6cea060dd63b22d4
+# Source0-md5:	ca21be4f6a4b612f756a483233ee6a32
 Patch0:		%{name}-nolibs.patch
 URL:		https://nanomsg.org/
 BuildRequires:	cmake >= 2.8.12
@@ -102,7 +102,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING README.md SUPPORT
 %attr(755,root,root) %{_bindir}/nanocat
 %attr(755,root,root) %{_libdir}/libnanomsg.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnanomsg.so.5
+%attr(755,root,root) %ghost %{_libdir}/libnanomsg.so.6
 %{_mandir}/man1/nanocat.1*
 
 %files devel
@@ -110,7 +110,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libnanomsg.so
 %{_includedir}/nanomsg
 %{_pkgconfigdir}/nanomsg.pc
-%{_libdir}/cmake/nanomsg-%{version}
+%{_libdir}/cmake/nanomsg-*
 %{_mandir}/man3/nn_*.3*
 %{_mandir}/man7/nanomsg.7*
 %{_mandir}/man7/nn_*.7*
