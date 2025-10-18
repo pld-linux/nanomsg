@@ -5,13 +5,13 @@
 Summary:	High-performance implementation of several "scalability protocols"
 Summary(pl.UTF-8):	Wydajna implementacja kilku "protokołów skalowalności"
 Name:		nanomsg
-Version:	1.2.1
+Version:	1.2.2
 Release:	1
 License:	MIT
 Group:		Libraries
 #Source0Download: https://github.com/nanomsg/nanomsg/releases
 Source0:	https://github.com/nanomsg/nanomsg/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	42deeb4b2e4a73b4a913734c281b7185
+# Source0-md5:	22525d90e9e34099f8f25dfcf6515bfb
 Patch0:		%{name}-nolibs.patch
 URL:		https://nanomsg.org/
 BuildRequires:	cmake >= 2.8.12
